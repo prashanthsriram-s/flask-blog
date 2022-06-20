@@ -15,10 +15,13 @@ from flaskr.db import get_db
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 def validateUsername(username):
+    reserved_words=['admin', 'DELETED_USER', 'mod']
     if not username:
         return "Please enter a Username!"
     if len(username)<4:
         return "Username should be longer than 4 characters"
+    if username in reserved_words:
+        return "username cannot be a reserved word"
     return None
 
 def validatePassword(password):
@@ -111,6 +114,7 @@ def login_required(view):
 def delete_account():
     db = get_db()
     try:
+        # before deleting, transfer all of user's posts to _DELETED_USER_'s posts
         db.execute("DELETE FROM user WHERE id =?", (session.get('user_id'), ))
         db.commit()
     except:

@@ -15,7 +15,7 @@ bp = Blueprint('blog', __name__)
 
 @bp.route("/")
 def index():
-    posts = get_db().execute("SELECT post.id, title, body, created, author_id, username FROM post, user WHERE post.author_id=user.id ORDER BY created DESC").fetchall()
+    posts = get_db().execute("SELECT post.id, title, body, created, author_id, username FROM post LEFT OUTER JOIN user ON post.author_id = user.id ORDER BY created DESC").fetchall()
     return render_template('blog/index.html', posts=posts)
 
 @bp.route("/create", methods=["GET", "POST"])
@@ -45,8 +45,7 @@ def create():
                 return redirect(url_for('blog.index'))
 
 def get_post_by_id(id, check_reqd=True):
-    post = get_db().execute("SELECT post.id, title, body, created, author_id, username FROM post JOIN user ON post.author_id = user.id WHERE post.id=?", (id,)).fetchone()
-
+    post = get_db().execute("SELECT post.id, title, body, created, author_id, username FROM post  LEFT OUTER JOIN user ON post.author_id = user.id WHERE post.id=?", (id,)).fetchone()
     if post is None:
         #No such post exists
         abort(404, "No Such Post Exists!")

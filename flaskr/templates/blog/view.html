@@ -11,11 +11,15 @@
 {% block content %}
 <article>
     <header>
-        <h1>{{post['title']}}</h1>
+        <h1><a href="{{url_for('blog.view', pid=post['id'])}}">{{post['title']}}</h1></a>
+        {% if post['username'] %}
         <div class="about">by {{post['username']}} on {{post['created']}}</div>
+        {% else %}
+        <div class="about">by DELETED_USER on {{post['created']}}</div>
+        {% endif %}
     </header>
     <p class="pcontent">{{post['body']}}</p>
-</article>
+</article> 
 <a href="{{url_for('index')}}">Back to Home</a>
 {% if post['username'] == g.user['username'] %}
 <hr>
