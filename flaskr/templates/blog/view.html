@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    View Post
+{% endblock %}
+
+{% block header %}
+    View the posts
+{% endblock %}
+
+{% block content %}
+    {% for result, auth_name in zip(res,auths) %}
+        <hr/>
+        <div class="post_heading">{{result['title']}} Created by {{auth_name}}</div>
+        <div class="post_body">{{result['body']}}</div>
+    {% endfor %}
+{% endblock %}

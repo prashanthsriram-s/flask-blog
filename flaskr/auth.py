@@ -1,10 +1,4 @@
-from crypt import methods
-import imp
-
-
 import functools
-from operator import index
-import re
 from flask import(
     Blueprint, flash, g, redirect, render_template, request, session, template_rendered, url_for, escape
 )
@@ -50,6 +44,7 @@ def register():
             except db.IntegrityError:
                 error = f"Username {escape(username)} is taken."
             else:
+                flash("Succesfully Registered. Now Log in!")
                 return redirect(url_for('auth.login'))
 
         flash(error)
@@ -96,6 +91,7 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
+            flash("You must be logged in to do that")
             return redirect(url_for('auth.login'))
 
         return view(**kwargs)
@@ -114,5 +110,5 @@ def delete_account():
         return redirect(url_for('index'))
     else:
         flash("Deletion Successful!")
-        return redirect(url_for(index))  
+        return redirect(url_for('index'))  
  
