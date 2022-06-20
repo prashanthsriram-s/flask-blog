@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Create a Post
+{% endblock %}
+
+{% block header %}
+    <h1>Create a Post</h1>
+{% endblock %}
+
+{% block content %}
+<div class="postingas">Posting as {{g.user['username']}}</div>
+<form method="post">
+    <label for="title">Title:</label>
+    <input name="title" id="title" autocomplete="off" required>
+    <br/>
+    <label for="Body">Body:</label>
+    <textarea name="body" id="body" autocomplete="off" required></textarea>
+    <br/>
+    <input type="submit" value="Post">
+</form>
+{% endblock %}
