@@ -50,6 +50,7 @@ def register():
             except db.IntegrityError:
                 error = f"Username {escape(username)} is taken."
             else:
+                flash("Successfully Registered. Login to continue!")
                 return redirect(url_for('auth.login'))
 
         flash(error)
@@ -71,6 +72,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
+            flash("Successfully logged in!")
             return redirect(url_for('index'))
 
         flash(error)
@@ -88,6 +90,7 @@ def load_logged_in_user():
 @bp.route("/logout")
 def logout():
     session.clear()
+    flash("Logged out.")
     return redirect(url_for('index'))
 
        
@@ -96,6 +99,7 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
+            flash("You must be logged in to do that!")
             return redirect(url_for('auth.login'))
 
         return view(**kwargs)
@@ -107,12 +111,12 @@ def login_required(view):
 def delete_account():
     db = get_db()
     try:
-        db.execute("DELETE FROM user WHERE id =?", (g.user[id], ))
+        db.execute("DELETE FROM user WHERE id =?", (session.get('user_id'), ))
         db.commit()
     except:
         flash(f"Failed! ")
         return redirect(url_for('index'))
     else:
         flash("Deletion Successful!")
-        return redirect(url_for(index))  
+        return redirect(url_for('index'))  
  
