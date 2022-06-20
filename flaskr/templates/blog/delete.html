@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Deleting {{post['title']}} - My Blog
+{% endblock %}
+
+{% block header %}
+<h1>Deleting {{post['title']}}</h1>
+{% endblock %}
+
+{% block content %}
+<h1>Are You Sure You want to Delete this post? Press Yes to Confirm</h1>
+<form method="post">
+    <input type="submit" value="Yes">
+</form>
+{% endblock %}
